@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mortgage Underwriting Platform - Legal + Local Assurance</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Landing Page -->
+    <div id="landing-view" class="view active">
+        <div class="landing-container">
+            <header class="landing-header">
+                <div class="demo-mode-indicator">
+                    <span class="demo-pulse"></span>
+                    <span>DEMO MODE</span>
+                </div>
+                <h1>Mortgage Underwriting Platform</h1>
+                <p class="subtitle">AI-Powered Valuation + Alternative Credit + Legal Assurance + Due Diligence Score</p>
+            </header>
+            
+            <div class="role-tiles">
+                <div class="role-tile" onclick="app.selectRole('consumer')">
+                    <div class="tile-icon">👤</div>
+                    <h2>Consumer Journey</h2>
+                    <p>Check Valuation &amp; Eligibility</p>
+                    <button class="btn btn--primary">Get Started</button>
+                </div>
+                
+                <div class="role-tile" onclick="app.selectRole('officer')">
+                    <div class="tile-icon">💼</div>
+                    <h2>Loan Officer Dashboard</h2>
+                    <p>Evaluate with AVM + Legal + Credit</p>
+                    <button class="btn btn--primary">Open Dashboard</button>
+                </div>
+                
+                <div class="role-tile" onclick="app.selectRole('connector')">
+                    <div class="tile-icon">📍</div>
+                    <h2>Connector App</h2>
+                    <p>Perform Local Verification &amp; Geo-Tag Visit</p>
+                    <button class="btn btn--primary">View Tasks</button>
+                </div>
+            </div>
+            
+            <div class="demo-notice">
+                <span class="demo-badge">DEMO MODE</span>
+                <p>This prototype demonstrates Tier-2/Tier-3 mortgage underwriting with:<br>
+                • Due Diligence Composite Score (AVM + Credit + Legal)<br>
+                • Personalized Interest Rate Calculation<br>
+                • AA Consent &amp; Privacy Framework<br>
+                • Rejection to Relationship Funnel<br>
+                • Legal + Local Assurance Layer</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Consumer View -->
+    <div id="consumer-view" class="view">
+        <div class="mobile-header">
+            <button class="back-btn" onclick="app.goBack()">← Back</button>
+            <h1>Property Valuation</h1>
+        </div>
+        
+        <div class="consumer-container">
+            <div id="consumer-form" class="consumer-section">
+                <h2>Property Details</h2>
+                <p class="info-text">Legal checks ensure dispute-free ownership</p>
+                
+                <div class="form-group">
+                    <label class="form-label">Select Test Case</label>
+                    <select id="persona-select" class="form-control" onchange="app.loadPersona()">
+                        <option value="">Choose a scenario...</option>
+                        <option value="CUST001">Rohit Sharma - Clear Case (Pune)</option>
+                        <option value="CUST002">Shabir Ahmed - Flagged Case (Indore)</option>
+                        <option value="CUST003">Priya Patil - Blocked Case (Nashik)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Property Address</label>
+                    <input type="text" id="property-address" class="form-control" placeholder="Enter property location" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Property Type</label>
+                    <input type="text" id="property-type" class="form-control" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Area (sq.ft)</label>
+                    <input type="number" id="property-area" class="form-control" readonly>
+                </div>
+                
+                <button class="btn btn--primary btn--full-width" onclick="app.submitProperty()">Check Valuation &amp; Eligibility</button>
+            </div>
+            
+            <div id="consumer-results" class="consumer-section" style="display: none;">
+                <h2>Your Assessment</h2>
+                
+                <!-- Due Diligence Composite Score -->
+                <div class="dd-score-card">
+                    <div class="dd-score-header">
+                        <h3>Due Diligence Score:</h3>
+                        <span class="info-icon" title="Composite of AVM, Credit, and Legal risk analysis">ℹ️</span>
+                    </div>
+                    <div class="dd-score-display">
+                        <div class="dd-score-value" id="dd-score-badge">--</div>
+                        <div class="dd-score-label" id="dd-score-label">Calculating...</div>
+                    </div>
+                </div>
+                
+                <div class="result-card">
+                    <div class="result-header">
+                        <h3>Property Valuation</h3>
+                        <div class="confidence-badge" id="avm-confidence"></div>
+                    </div>
+                    <div class="result-value" id="avm-value">₹ --</div>
+                    <p class="result-subtitle">AVM Estimated Value</p>
+                </div>
+                
+                <div class="result-card">
+                    <div class="result-header">
+                        <h3>Credit Assessment</h3>
+                        <div class="risk-badge" id="credit-risk"></div>
+                    </div>
+                    <div class="result-value" id="credit-score">--</div>
+                    <p class="result-subtitle">Alternative Credit Score</p>
+                    <p class="cashflow-info" id="cashflow-volatility">--</p>
+                </div>
+                
+                <div class="result-card legal-card">
+                    <div class="result-header">
+                        <h3>Legal Status</h3>
+                        <div class="status-badge" id="legal-badge"></div>
+                    </div>
+                    <div class="legal-confidence" id="legal-confidence">--</div>
+                    <div class="legal-message" id="legal-message"></div>
+                    <div class="legal-issues" id="legal-issues"></div>
+                </div>
+                
+                <!-- Interest Rate Card -->
+                <div class="interest-rate-card" id="interest-rate-card" style="display: none;">
+                    <h3>Approved at personalized rate:</h3>
+                    <div class="interest-rate-display">
+                        <div class="rate-value" id="interest-rate">--</div>
+                        <p class="rate-explanation" id="rate-explanation">--</p>
+                    </div>
+                </div>
+                
+                <div class="loan-estimate" id="loan-estimate">
+                    <h3>Estimated Loan Amount</h3>
+                    <div class="loan-amount" id="loan-amount">₹ --</div>
+                    <p class="estimate-note">Based on 80% LTV ratio</p>
+                </div>
+                
+                <!-- Relationship Funnel for Rejected -->
+                <div class="relationship-funnel" id="relationship-funnel" style="display: none;">
+                    <div class="funnel-header">
+                        <h3>This isn't the end — we can help you build eligibility</h3>
+                        <p>Explore alternate paths to financial wellness</p>
+                    </div>
+                    <div class="funnel-options" id="funnel-options"></div>
+                </div>
+                
+                <button class="btn btn--secondary btn--full-width" onclick="app.resetConsumer()">Check Another Property</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loan Officer Dashboard -->
+    <div id="officer-view" class="view">
+        <div class="dashboard-header">
+            <div class="header-content">
+                <h1>Loan Officer Dashboard</h1>
+                <button class="back-btn" onclick="app.goBack()">← Back to Home</button>
+            </div>
+        </div>
+        
+        <div class="dashboard-container">
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-value">24</div>
+                    <div class="kpi-label">Active Applications</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-value">8</div>
+                    <div class="kpi-label">Pending Legal Review</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-value">12</div>
+                    <div class="kpi-label">Approved This Month</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-value">3</div>
+                    <div class="kpi-label">Field Verifications</div>
+                </div>
+            </div>
+            
+            <div class="applications-section">
+                <h2>Applications Pipeline</h2>
+                <div class="application-filters">
+                    <button class="filter-btn active" onclick="app.filterApplications('all')">All (3)</button>
+                    <button class="filter-btn" onclick="app.filterApplications('clear')">🟢 Clear (1)</button>
+                    <button class="filter-btn" onclick="app.filterApplications('flagged')">🟡 Flagged (1)</button>
+                    <button class="filter-btn" onclick="app.filterApplications('blocked')">🔴 Blocked (1)</button>
+                </div>
+                
+                <div id="applications-list" class="applications-list"></div>
+            </div>
+            
+            <div id="case-detail" class="case-detail" style="display: none;">
+                <div class="detail-header">
+                    <h2 id="case-name">Application Details</h2>
+                    <button class="btn btn--secondary" onclick="app.closeCase()">Close</button>
+                </div>
+                
+                <!-- Due Diligence & Rate Summary -->
+                <div class="dd-rate-summary">
+                    <div class="summary-card">
+                        <div class="summary-label">Due Diligence Score:</div>
+                        <div class="dd-score-large" id="detail-dd-score">--</div>
+                        <div class="dd-score-label" id="detail-dd-label">--</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-label">Interest Rate Band:</div>
+                        <div class="rate-large" id="detail-rate">--</div>
+                        <div class="rate-note" id="detail-rate-note">--</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-label">AA Consent Log:</div>
+                        <div id="detail-consent-status" class="consent-log">--</div>
+                    </div>
+                </div>
+                
+                <div class="assessment-grid">
+                    <!-- AVM Card -->
+                    <div class="assessment-card">
+                        <div class="card-header">
+                            <h3>AVM Valuation</h3>
+                            <span class="info-icon" title="Automated Valuation Model using comparable sales data">ℹ️</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="main-metric">
+                                <div class="metric-value" id="detail-avm-value">₹ --</div>
+                                <div class="metric-label">Estimated Value</div>
+                            </div>
+                            <div class="confidence-meter">
+                                <div class="meter-label">Confidence</div>
+                                <div class="meter-bar">
+                                    <div class="meter-fill" id="detail-avm-meter"></div>
+                                </div>
+                                <div class="meter-value" id="detail-avm-confidence">--</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Credit Card -->
+                    <div class="assessment-card">
+                        <div class="card-header">
+                            <h3>Alt-Data Credit</h3>
+                            <span class="info-icon" title="Alternative credit scoring using digital footprint">ℹ️</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="main-metric">
+                                <div class="metric-value" id="detail-credit-score">--</div>
+                                <div class="metric-label">Credit Score</div>
+                            </div>
+                            <div class="risk-indicator">
+                                <div class="risk-badge" id="detail-credit-risk"></div>
+                            </div>
+                            <div class="cashflow-detail" id="detail-cashflow">--</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Legal Risk Card (NEW) -->
+                    <div class="assessment-card legal-assessment">
+                        <div class="card-header">
+                            <h3>Legal Risk Scan</h3>
+                            <span class="info-icon" title="Boundary & title signals analyzed from registry + GIS + docs">ℹ️</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="legal-status-section">
+                                <div class="status-badge-large" id="detail-legal-badge"></div>
+                                <div class="confidence-meter">
+                                    <div class="meter-label">Legal Confidence</div>
+                                    <div class="meter-bar">
+                                        <div class="meter-fill" id="detail-legal-meter"></div>
+                                    </div>
+                                    <div class="meter-value" id="detail-legal-confidence">--</div>
+                                </div>
+                            </div>
+                            <div class="legal-issues-section" id="detail-legal-issues"></div>
+                            <div class="legal-actions" id="detail-legal-actions"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="decision-section">
+                    <h3>Final Decision</h3>
+                    <div class="decision-workflow">
+                        <div class="workflow-step" id="workflow-avm">
+                            <div class="step-icon">📊</div>
+                            <div class="step-label">AVM Check</div>
+                            <div class="step-status">--</div>
+                        </div>
+                        <div class="workflow-arrow">→</div>
+                        <div class="workflow-step" id="workflow-credit">
+                            <div class="step-icon">💳</div>
+                            <div class="step-label">Credit Check</div>
+                            <div class="step-status">--</div>
+                        </div>
+                        <div class="workflow-arrow">→</div>
+                        <div class="workflow-step" id="workflow-legal">
+                            <div class="step-icon">⚖️</div>
+                            <div class="step-label">Legal Check</div>
+                            <div class="step-status">--</div>
+                        </div>
+                        <div class="workflow-arrow">→</div>
+                        <div class="workflow-step" id="workflow-decision">
+                            <div class="step-icon">✓</div>
+                            <div class="step-label">Decision</div>
+                            <div class="step-status">--</div>
+                        </div>
+                    </div>
+                    <div class="decision-actions">
+                        <button class="btn btn--primary" id="approve-btn" onclick="app.approveCase()">Approve Application</button>
+                        <button class="btn btn--outline" onclick="app.rejectCase()">Reject</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Connector View -->
+    <div id="connector-view" class="view">
+        <div class="mobile-header">
+            <button class="back-btn" onclick="app.goBack()">← Back</button>
+            <h1>Field Verification</h1>
+        </div>
+        
+        <div class="connector-container">
+            <div class="connector-stats">
+                <div class="stat-card">
+                    <div class="stat-value">12</div>
+                    <div class="stat-label">Tasks Completed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">₹18,500</div>
+                    <div class="stat-label">Earnings This Month</div>
+                </div>
+            </div>
+            
+            <div class="tasks-section">
+                <h2>Active Tasks</h2>
+                <div id="connector-tasks" class="tasks-list"></div>
+            </div>
+            
+            <div id="verification-form" class="verification-form" style="display: none;">
+                <div class="form-header">
+                    <h2>Legal Field Verification</h2>
+                    <button class="close-btn" onclick="app.closeVerification()">✕</button>
+                </div>
+                
+                <div class="property-info" id="verification-property"></div>
+                
+                <p class="instruction-text">Capture boundary photos &amp; verify property access</p>
+                
+                <div class="photo-grid">
+                    <div class="photo-upload" data-type="front">
+                        <div class="upload-icon">📷</div>
+                        <div class="upload-label">Front View</div>
+                        <input type="file" accept="image/*" onchange="app.capturePhoto('front', this)">
+                        <div class="upload-status"></div>
+                    </div>
+                    <div class="photo-upload" data-type="side1">
+                        <div class="upload-icon">📷</div>
+                        <div class="upload-label">Side-1 Boundary</div>
+                        <input type="file" accept="image/*" onchange="app.capturePhoto('side1', this)">
+                        <div class="upload-status"></div>
+                    </div>
+                    <div class="photo-upload" data-type="side2">
+                        <div class="upload-icon">📷</div>
+                        <div class="upload-label">Side-2 Boundary</div>
+                        <input type="file" accept="image/*" onchange="app.capturePhoto('side2', this)">
+                        <div class="upload-status"></div>
+                    </div>
+                    <div class="photo-upload" data-type="road">
+                        <div class="upload-icon">📷</div>
+                        <div class="upload-label">Access Road</div>
+                        <input type="file" accept="image/*" onchange="app.capturePhoto('road', this)">
+                        <div class="upload-status"></div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Field Notes</label>
+                    <textarea id="verification-notes" class="form-control" maxlength="200" placeholder="Enter your observations (max 200 characters)"></textarea>
+                    <div class="char-count"><span id="notes-count">0</span>/200</div>
+                </div>
+                
+                <div class="gps-status" id="gps-status">
+                    <span class="gps-icon">📍</span>
+                    <span id="gps-text">GPS: Capturing location...</span>
+                </div>
+                
+                <button class="btn btn--primary btn--full-width" id="submit-verification-btn" onclick="app.submitVerification()" disabled>Submit Verification</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AA Consent Modal -->
+    <div id="aa-consent-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Account Aggregator Consent</h2>
+                <button class="close-btn" onclick="app.closeAAConsent()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="consent-icon">🔐</div>
+                <h3>Consent to analyze your digital cashflows for best rate</h3>
+                <p class="consent-text">We need your permission to access your banking data through the Account Aggregator framework. This helps us:</p>
+                <ul class="consent-benefits">
+                    <li>✓ Understand your cashflow patterns</li>
+                    <li>✓ Offer you a personalized, deserved interest rate</li>
+                    <li>✓ Make faster credit decisions</li>
+                    <li>✓ Protect your financial privacy (data encrypted)</li>
+                </ul>
+                <div class="consent-note">
+                    <strong>Your data is secure:</strong> We use RBI-approved Account Aggregator network. Your data is encrypted and used only for underwriting.
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn--primary btn--full-width" onclick="app.grantAAConsent()">Grant Consent &amp; Continue</button>
+                <button class="btn btn--outline btn--full-width" onclick="app.denyAAConsent()">Skip (Limited Assessment)</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
